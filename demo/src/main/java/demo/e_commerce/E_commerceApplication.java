@@ -1,13 +1,13 @@
-package e_commerce.demo;
+package demo.e_commerce;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class DemoApplication {
+public class E_commerceApplication {
 
 	public static void main(String[] args) {
-		SpringApplication.run(DemoApplication.class, args);
+		SpringApplication.run(E_commerceApplication.class, args);
 		System.out.println("Hello Mitch");
 
 	}
