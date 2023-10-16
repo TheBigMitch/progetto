@@ -7,7 +7,7 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public interface OrdineRepository extends JpaRepository<Ordine, Long> {
-
+public interface OrdineRepository extends JpaRepository<Ordine, Long> 
+{
     List<Ordine> findAllByUtente(String utente);
 }
