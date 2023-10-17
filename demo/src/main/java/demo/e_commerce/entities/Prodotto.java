@@ -16,7 +16,7 @@ public class Prodotto
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(nullable = false)
-    private Long isbn;
+    private String isbn;
 
     @Setter
     @Getter
@@ -54,9 +54,4 @@ public class Prodotto
     @Getter
     @Column(name="quantità", nullable = false)
     private int quantita;
-
-    @Basic
-    @Setter
-    @Getter
-    private String idC;
 }
