@@ -8,7 +8,8 @@ import java.util.Date;
 @Entity
 @Table(name="ProdottiOrdinati")
 @Data
-public class ProdottoOrdinato {
+public class ProdottoOrdinato 
+{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;

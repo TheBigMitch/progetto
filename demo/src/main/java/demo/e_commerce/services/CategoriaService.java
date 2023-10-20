@@ -30,10 +30,13 @@ public class CategoriaService
     public Categoria aggiornaCategoria(Long categoriaID, Categoria nuovaCategoria)throws CategoriaNonEsistenteException 
     {
         Categoria categoria= categoriaRepository.findById(categoriaID).get();
+
         if(categoria==null){ throw new CategoriaNonEsistenteException(); }
 
         categoria.setNome(nuovaCategoria.getNome());
+        categoria.setDescrizione(nuovaCategoria.getDescrizione());
         categoria.setProdotti(nuovaCategoria.getProdotti());
+        categoria.setUrlImmagine(nuovaCategoria.getUrlImmagine());
         categoriaRepository.save(categoria);
         return categoria;
     }

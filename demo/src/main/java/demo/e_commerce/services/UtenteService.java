@@ -20,6 +20,7 @@ public class UtenteService
     public Utente registerUser(Utente utente) throws MailAlreadyUsedException 
     {
         if (utenteRepository.existsByUsername(JwtUtil.getEmail()) ){ throw new MailAlreadyUsedException(); }
+
         utente.setUsername(JwtUtil.getEmail());
         return utenteRepository.save(utente);
     }

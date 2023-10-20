@@ -14,7 +14,8 @@ import java.util.List;
 @ToString
 @Entity
 @Table(name = "utenti")
-public class Utente{
+public class Utente
+{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)

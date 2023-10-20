@@ -30,7 +30,7 @@ public class ProdottoCarrelloService
         try{
             String username = JwtUtil.getEmail();
             Utente utente= utenteRepository.findByUsername(username);
-            Prodotto p = prodottoRepository.findByIsbn(prodotto.getIsbn()).get();
+            Prodotto p = prodottoRepository.findById(prodotto.getId()).get();
             carrello.setUtente(utente);
             carrello.setQuantita(1);
             carrello.setPrezzo(p.getPrezzo());
@@ -39,8 +39,10 @@ public class ProdottoCarrelloService
             Date date = new Date();
             carrello.setData(date);
             carrelloRepository.save(carrello);
-        }
-        catch(Exception e){ throw new Exception(); }
+            }
+
+            catch(Exception e){ throw new Exception(); }
+
         return carrello;
     }
 

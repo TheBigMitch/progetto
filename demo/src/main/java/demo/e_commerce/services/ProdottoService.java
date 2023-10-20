@@ -12,7 +12,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -31,10 +30,10 @@ public class ProdottoService
     @Transactional(readOnly = false)
     public Prodotto aggiungiProdotto(Prodotto prodotto) throws ProdottoEsistenteException 
     {
-        if(prodottoRepository.existsByIsbn(prodotto.getIsbn())){ throw new ProdottoEsistenteException(); }
-        
-        long isbn= Long.parseLong(prodotto.getIsbn());
-        Categoria categoria= categoriaRepository.findById(isbn).get();
+        if(prodottoRepository.existsByCodice(prodotto.getCodice())){ throw new ProdottoEsistenteException(); }
+
+        long idC= Long.parseLong(prodotto.getIdC());
+        Categoria categoria= categoriaRepository.findById(idC).get();
         prodotto.setCategoria(categoria);
         prodottoRepository.save(prodotto);
         return prodotto;
@@ -54,10 +53,10 @@ public class ProdottoService
     }
 
     @Transactional(readOnly = true)
-    public List<Prodotto> mostraProdottiPerNome(String nome){ return prodottoRepository.findByNomeContaining(nome); }
+    public List<Prodotto> mostraProdottiPerNome(String nome) { return prodottoRepository.findByNomeContaining(nome); }
 
     @Transactional(readOnly = true)
-    public List<Prodotto> mostraProdottiPerIsbn(String isbn){ return prodottoRepository.findByIsbn(isbn); }
+    public List<Prodotto> mostraProdottiPerCodice(String codice) { return prodottoRepository.findByCodice(codice); }
 
     @Transactional(readOnly = true)
     public List<Prodotto> getProdottiCategoria(Long IdCategoria){ return prodottoRepository.findByCategoria_Id(IdCategoria); }

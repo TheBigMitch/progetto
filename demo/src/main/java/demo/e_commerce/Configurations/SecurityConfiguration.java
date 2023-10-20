@@ -1,53 +1,83 @@
 package demo.e_commerce.Configurations;
 
-import demo.e_commerce.utilities.*;
+import demo.e_commerce.utilities.JwtAuthenticationConverter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
-import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
+import org.springframework.security.config.Customizer;
+import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
-import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
-import org.springframework.web.filter.CorsFilter;
-import org.springframework.web.servlet.config.annotation.CorsRegistry;
-import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
-
-import java.util.Collections;
-
 
 @Configuration
-@EnableGlobalMethodSecurity(prePostEnabled = true)
-public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
-
-
-    @Override
-    protected void configure(HttpSecurity http) throws Exception {
-        http.csrf().disable().sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and().authorizeRequests()
-                .antMatchers(HttpMethod.OPTIONS, "/**").permitAll()
-                .antMatchers("/utenti/**").permitAll()
-                .antMatchers("/prodotti/**").permitAll()
-                .antMatchers("/ordini/**").permitAll()
-                .antMatchers("/categorie/**").permitAll()
-                .anyRequest().authenticated().and().oauth2ResourceServer().jwt().jwtAuthenticationConverter(new JwtAuthenticationConverter());
-    }
-
+@EnableWebSecurity
+@EnableMethodSecurity(
+        prePostEnabled = true,
+        securedEnabled = true,
+        jsr250Enabled = true)
+public class SecurityConfiguration {
     @Bean
-    public CorsFilter corsFilter() {
-        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-        CorsConfiguration configuration = new CorsConfiguration();
-        configuration.setAllowCredentials(true);
-        configuration.setAllowedOriginPatterns(Collections.singletonList("http://localhost:4200"));
-        configuration.addAllowedHeader("*");
-        configuration.addAllowedMethod("OPTIONS");
-        configuration.addAllowedMethod("GET");
-        configuration.addAllowedMethod("POST");
-        configuration.addAllowedMethod("PUT");
-        configuration.addAllowedMethod("DELETE");
-        source.registerCorsConfiguration("/**", configuration);
-        return new CorsFilter(source);
+    public SecurityFilterChain configure(HttpSecurity http) throws Exception {
+        http
+                .csrf((csrf) -> csrf.disable()).authorizeHttpRequests((auth) ->
+                auth.requestMatchers("/registrazione/**").permitAll()
+                        .requestMatchers(HttpMethod.OPTIONS).permitAll()
+                        /*    .requestMatchers("/farmacia/magazzino").hasAuthority("farmacia")
+                            .requestMatchers("/carerllo/**").hasAuthority("farmacia")
+                            .requestMatchers("/cliente/**").hasAuthority("cliente")
+                            .requestMatchers("/gestore/**").hasAuthority("admin")
+                            .requestMatchers(HttpMethod.GET,"/prodotti/**").hasAuthority("gestore")
+                            .requestMatchers(HttpMethod.GET,"/prodotti/**").hasAuthority("farmacia")
+                            .requestMatchers(HttpMethod.PUT,"/prodotti/**").hasAuthority("gestore")
+                            .requestMatchers(HttpMethod.POST,"/prodotti/**").hasAuthority("gestore")
+                            .requestMatchers("/visite/**").hasAuthority("gestore")
+                            .requestMatchers(HttpMethod.PUT,"/farmacie/**").hasAuthority("gestore")
+                            .requestMatchers(HttpMethod.POST,"/farmacie/**").hasAuthority("cliente")
+                            .requestMatchers(HttpMethod.GET,"/farmacie/**").hasAuthority("cliente")
+                            .requestMatchers(HttpMethod.GET,"/farmacie","/farmacie/{citta}").hasAuthority("gestore")
+                          */
+                        .anyRequest().authenticated())
+                .oauth2ResourceServer(server -> server.jwt().jwtAuthenticationConverter(new JwtAuthenticationConverter()));
+        http
+                .sessionManagement(management -> management
+                        .sessionCreationPolicy(SessionCreationPolicy.STATELESS));
+        http.httpBasic(Customizer.withDefaults());
+        return http.build();
     }
 
+    /*
+        @Bean
+        public CorsFilter corsFilter() {
+            UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+            CorsConfiguration configuration = new CorsConfiguration();
+            configuration.setAllowCredentials(true);
+            //configuration.addAllowedOrigin("*");
+            configuration.addAllowedOriginPattern("*");
+            configuration.addAllowedOrigin("http://localhost:8080");
+            configuration.addAllowedHeader("*");
+            configuration.addAllowedMethod("OPTIONS");
+            configuration.addAllowedMethod("GET");
+            configuration.addAllowedMethod("POST");
+            configuration.addAllowedMethod("PUT");
+            configuration.addAllowedMethod("DELETE");
+            source.registerCorsConfiguration("/**", configuration);
+            return new CorsFilter(source);
+        }
+     */
+    @Bean
+    public CorsConfigurationSource corsConfigurationSource() {
+        CorsConfiguration configuration = new CorsConfiguration();
+        configuration.addAllowedOrigin("*");
+        configuration.addAllowedMethod("*");
+        configuration.addAllowedHeader("*");
+        configuration.setAllowCredentials(true);
+        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        source.registerCorsConfiguration("/**", configuration);
+        return source;
+    }
 }
