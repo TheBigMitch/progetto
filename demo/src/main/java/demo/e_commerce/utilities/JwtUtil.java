@@ -8,42 +8,34 @@ import lombok.extern.log4j.Log4j2;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.oauth2.jwt.Jwt;
 
-
 @UtilityClass
 @Log4j2
-public class JwtUtil {
+public class JwtUtil 
+{
+    public Jwt getPrincipal() { return (Jwt) SecurityContextHolder.getContext().getAuthentication().getPrincipal(); }
 
+    public String getAuthServerId() { return getTokenNode().get("subject").asText(); }
 
-    public Jwt getPrincipal() {
-        return (Jwt) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-    }
+    public String getName() { return getTokenNode().get("sub").asText(); }
 
-    public String getAuthServerId() {
-        return getTokenNode().get("subject").asText();
-    }
+    public String getEmail() { return getTokenNode().get("claims").get("preferred_username").asText(); }
 
-    public String getName() {
-        return getTokenNode().get("sub").asText();
-    }
-
-    public String getEmail() {
-        return getTokenNode().get("claims").get("preferred_username").asText();
-    }
-
-    private JsonNode getTokenNode() {
+    private JsonNode getTokenNode() 
+    {
         Jwt jwt = getPrincipal();
         ObjectMapper objectMapper = new ObjectMapper();
         String jwtAsString;
         JsonNode jsonNode;
-        try {
+        try 
+        {
             jwtAsString = objectMapper.writeValueAsString(jwt);
             jsonNode = objectMapper.readTree(jwtAsString);
-        } catch (JsonProcessingException e) {
+        }
+        catch (JsonProcessingException e) 
+        {
             log.error(e.getMessage());
             throw new RuntimeException("Unable to retrieve user's info!");
         }
         return jsonNode;
     }
-
-
 }

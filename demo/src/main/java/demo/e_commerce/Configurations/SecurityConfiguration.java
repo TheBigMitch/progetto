@@ -20,6 +20,7 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
         prePostEnabled = true,
         securedEnabled = true,
         jsr250Enabled = true)
+@SuppressWarnings(value = { "all" })
 public class SecurityConfiguration {
     @Bean
     public SecurityFilterChain configure(HttpSecurity http) throws Exception {
