@@ -1,4 +1,4 @@
-package demo.e_commerce.Configurations;
+package demo.e_commerce.configurations;
 
 import demo.e_commerce.utilities.JwtAuthenticationConverter;
 import org.springframework.context.annotation.Bean;

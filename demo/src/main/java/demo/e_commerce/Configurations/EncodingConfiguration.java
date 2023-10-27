@@ -1,4 +1,4 @@
-package demo.e_commerce.Configurations;
+package demo.e_commerce.configurations;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

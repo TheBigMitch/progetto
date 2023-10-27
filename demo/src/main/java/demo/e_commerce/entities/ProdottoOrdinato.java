@@ -1,7 +1,7 @@
 package demo.e_commerce.entities;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import javax.persistence.*;
+import jakarta.persistence.*;
 import lombok.Data;
 import java.util.Date;
 
